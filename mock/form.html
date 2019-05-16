@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta content="initial-scale=1, shrink-to-fit=no, width=device-width" name="viewport">
+
+    <title>nextforms</title>
+
+    <!-- CSS -->
+    <!-- Add Material font (Roboto) and Material icon as needed -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,500,500i,700,700i|Roboto+Mono:300,400,700|Roboto+Slab:300,400,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <!-- Add Material CSS, replace Bootstrap CSS -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daemonite-material@4.1.1/css/material.min.css">
+
+    <!-- nextforms -->
+    <link rel="stylesheet" href="css/nextforms.css">
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+        <a class="navbar-brand" href="index.html">FCL JUKO</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="index.html">Juniorentrainer <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="wegleitung.html">Wegleitung</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- content -->
+<div class="container">
+    <h3 class="mt-3">Trainerentschädigung</h3>
+
+    <div class="row">
+        <div class="col-12 col-md-6">
+            <!-- basic -->
+			<!-- ko if: !$root.isForm() -->
+            <div class="row">
+                <div class="col-12 col-md-6">
+                    <div class="form-group">
+                        <label for="year">Jahr</label>
+                        <input type="number" class="form-control" id="year" placeholder="YYYY" data-bind="value: salary.year" />
+                    </div>
+                </div>
+                <div class="col-12 col-md-6">
+                    <div class="custom-control custom-radio">
+                        <input type="radio" id="vorrunde1" name="customRadio" class="custom-control-input" value="false" data-bind="checked: salary.vorrunde, checkedValue: false" />
+                        <label class="custom-control-label" for="vorrunde1">Frühlingsrunde (01.01. bis 30.06.)</label>
+                    </div>
+                    <div class="custom-control custom-radio">
+                        <input type="radio" id="vorrunde2" name="customRadio" class="custom-control-input" value="true" data-bind="checked: salary.vorrunde, checkedValue: true" />
+                        <label class="custom-control-label" for="vorrunde2">Herbstrunde (01.07. bis 31.12.)</label>
+                    </div>
+                </div>
+            </div>
+
+            <hr />
+
+            <div class="form-group">
+                <label for="salaryType">Entschädigung</label>
+                <select class="form-control" id="salaryType"
+                        data-bind="value: salary.salaryType">
+                    <option value="juniorentrainer">Juniorentrainer</option>
+                    <option value="spezialtrainer">Spezialtrainer</option>
+                </select>
+            </div>
+
+            <div class="row">
+                <div class="col-12 col-md-6">
+                    <div class="form-group">
+                        <label for="juniorenstufe">Juniorenstufe</label>
+                        <select class="form-control" id="juniorenstufe"
+                            data-bind="options: $root.getLevels(),
+                            optionsText: 'name',
+                            value: salary.level,
+                            optionsCaption: '-Bitte wählen-'">
+                        </select>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6" data-bind="visible: salary.salaryType()=='juniorentrainer'">
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" value="true" id="alone" data-bind="checked: salary.alone, change: salary.toggleAlone">
+                        <label class="custom-control-label" for="alone">Nur Cheftrainer</label>
+                    </div>
+
+                    <div class="custom-control custom-checkbox" data-bind="if: salary.level">
+                        <input type="checkbox" class="custom-control-input" value="true" id="ccjl" data-bind="enable: salary.level().diploma.higher, checked: salary.ccjl">
+                        <label class="custom-control-label" for="ccjl">Team spielt in der CCJL</label>
+                    </div>
+                </div>
+            </div>
+
+            <hr />
+			<!-- /ko -->
+
+      <div data-bind="foreach: salary.trainer">
+				<div class="row">
+					<div class="col-12 col-md-6">
+						<strong>Trainer <span data-bind="text: trainerNr($index())"></span></strong>
+					</div>
+
+					<div class="col-12 col-md-6">
+              <div class="custom-control custom-checkbox" data-bind="visible: $root.salary.salaryType()=='juniorentrainer'">
+                  <input type="checkbox" class="custom-control-input" value="true" data-bind="attr: { id: 'cheftrainer' + $index() }, enable: !$root.salary.alone(), checked: cheftrainer">
+                  <label class="custom-control-label" data-bind="attr: { for:'cheftrainer' + $index() }">Cheftrainer</label>
+              </div>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-12 col-md-6">
+						<div class="form-group">
+							<label for="diplom_cheftrainer">Diplom</label>
+							<select class="form-control" id="diplom_cheftrainer"
+									data-bind="options: $root.diplomas,
+								   optionsText: 'name',
+								   value: diploma,
+								   optionsCaption: '-Bitte wählen-'"></select>
+						</div>
+					</div>
+
+					<div class="col-12 col-md-6">
+              <div class="form-group" data-bind="visible: $root.salary.salaryType()=='juniorentrainer'">
+                  <label for="trainingseinheiten">Trainingseinheiten</label>
+                  <input type="number" class="form-control" id="trainingseinheiten" data-bind="value: trainingseinheiten" />
+              </div>
+
+              <div class="form-group" data-bind="visible: $root.salary.salaryType()=='spezialtrainer'">
+                  <label for="diplom_spezialtrainer">Spezialtrainer Diplom</label>
+                  <select class="form-control" id="diplom_spezialtrainer"
+                          data-bind="options: $root.getSpecialDiplomas(),
+                                 optionsText: 'name',
+                                 value: specialDiploma,
+                                 optionsCaption: 'Kein Spezialtrainer Diplom'"></select>
+              </div>
+					</div>
+				</div>
+
+				<!-- ko if: !$root.salary.vorrunde() -->
+        <div class="row">
+					<div class="col-12 col-md-6 mr-auto">
+                <div class="form-group">
+                    <label for="trainingswoche">Trainings während Trainingswoche</label>
+	                   <!-- max 10?! oder 5? -->
+                    <input type="number" class="form-control" id="trainingswoche" data-bind="value: trainingswoche" />
+                </div>
+          </div>
+        </div>
+        <!-- /ko -->
+				<!-- ko if: $root.isForm() -->
+				<div class="row">
+					<div class="col-12">
+                        <div class="form-group">
+                            <label for="name">Vorname und Name</label>
+                            <input type="text" class="form-control" id="name" data-bind="value: name" />
+                        </div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-12 col-md-6">
+                        <div class="form-group">
+                            <label for="strasse">Strasse</label>
+                            <input type="text" class="form-control" id="strasse" data-bind="value: strasse" />
+                        </div>
+					</div>
+
+					<div class="col-12 col-md-6">
+						<div class="form-group">
+                            <label for="plzort">PLZ Ort</label>
+                            <input type="text" class="form-control" id="plzort" data-bind="value: plzort" />
+                        </div>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-12 col-md-6">
+						<div class="form-group">
+                            <label for="ahvnr">AHV Nr.</label>
+                            <input type="text" class="form-control" id="ahvnr" data-bind="value: ahvnr" />
+                        </div>
+					</div>
+
+					<div class="col-12 col-md-6">
+						<div class="form-group">
+                            <label for="iban">IBAN</label>
+                            <input type="text" class="form-control" id="iban" data-bind="value: iban" />
+                        </div>
+					</div>
+				</div>
+
+        <button class="btn btn-primary" data-bind="click: $root.downloadForm($index())">Abrechnung herunterladen (<span data-bind="text: $index()"></span>)</button>
+				<!-- /ko -->
+
+				<!-- ko if: !$root.isForm() -->
+				<!-- ko if: $root.salary.salaryType()=='juniorentrainer' -->
+				<button class="btn btn-sm btn-danger mb-3" data-bind="visible: !$root.salary.alone(), enable: $root.salary.trainer().length>1, click: $root.removeTrainer">Löschen</button>
+				<!-- /ko -->
+				<!-- /ko -->
+
+			</div>
+			<!-- ko if: !$root.isForm() -->
+			<!-- ko if: $root.salary.salaryType()=='juniorentrainer' -->
+			<button class="btn btn-sm" data-bind="visible: !$root.salary.alone(), click: addTrainer">+Trainer</button>
+			<!-- /ko -->
+			<!-- /ko -->
+			<hr />
+			<!-- todo: diabled when error not complete -->
+      <button class="btn btn-primary" data-bind="visible: !$root.isForm(), click: generateForm">Abrechnung generieren</button>
+
+			<!-- ko if: $root.isForm() -->
+			<div class="custom-control custom-checkbox">
+				<input type="checkbox" class="custom-control-input" value="true" id="commitment">
+				<label class="custom-control-label" for="commitment">Commitment</label>
+			</div>
+
+      <button class="btn btn-default" data-bind="click: generateForm">Abbrechen</button>
+			<!-- /ko -->
+        </div>
+        <div class="col-12 col-md-6">
+            <h5>Auflistung aller Entschädigungen und Abzüge</h5>
+
+            <div data-bind="if: salary.level">
+                <div class="card mt-3">
+                    <div class="card-body">
+                        <h5 class="card-text">
+                            Juniorenstufe:
+                            <span data-bind="text: salary.level().name"></span>
+                            <span data-bind="if: salary.ccjl">CCJL</span>
+                        </h5>
+                        <p class="card-text">
+                            Geforderte(s) Diplom:
+                            <strong data-bind="visible: !salary.ccjl(), diploma: salary.level().diploma.needed"></strong>
+                            <strong data-bind="visible: salary.ccjl, diploma: salary.level().diploma.higher"></strong>
+                            <!-- ko if: salary.level().diploma.other -->
+                            und/oder <strong data-bind="diploma: salary.level().diploma.other"></strong>
+                            <!-- /ko -->
+
+							<div data-bind="visible: !$root.salary.vorrunde()">
+								Datum: 01.01. bis 30.06.<span data-bind="text: salary.year"></span>
+							</div>
+							<div data-bind="visible: salary.vorrunde()">
+								Datum: 01.07. bis 31.12.<span data-bind="text: salary.year"></span>
+							</div>
+                        </p>
+
+						<!-- todo: better css table!!! -> line-height!! -->
+						<div class="card-text">
+							<div data-bind="foreach: salary.trainer">
+								<!-- ko if: $root.isForm() -->
+								<h5>
+									<span data-bind="text: name"></span>, <span data-bind="text: ahvnr"></span><br />
+									<small data-bind="visible: cheftrainer()">Cheftrainer</small>
+									<small data-bind="visible: !cheftrainer()">Assistenztrainer</small>
+								</h5>
+								<!-- /ko -->
+
+								<!-- ko if: !$root.isForm() -->
+								<h5>
+									<span data-bind="visible: cheftrainer()">Cheftrainer</span>
+									<span data-bind="visible: !cheftrainer()">Assistenztrainer</span>
+								</h5>
+								<!-- /ko -->
+								<table class="table">
+									<tbody>
+										<!-- ko if: cheftrainer() -->
+										<tr>
+											<td>
+												<strong>Grundlohn</strong>
+												<ul>
+													<li>Mannschaftsbetreuung</li>
+												</ul>
+											</td>
+											<td class="text-right"><span data-bind="text: basis()"></span></td>
+										</tr>
+										<!-- /ko -->
+										<!-- ko if: $root.salary.salaryType()=='juniorentrainer' -->
+										<tr>
+											<td>
+												<strong>Trainingseinheiten</strong>
+												<ul>
+													<li>1. Trainingseinheit</li>
+													<li>Jede weitere</li>
+												</ul>
+											</td>
+											<td class="text-right"><span data-bind="text: th()"></span></td>
+										</tr>
+										<!-- /ko -->
+										<!-- ko if: !$root.salary.vorrunde() -->
+										<tr>
+											<td>
+												<strong>Trainingswoche</strong>
+												<ul>
+													<li>Je Trainingseinheit</li>
+												</ul>
+											</td>
+											<td class="text-right"><span data-bind="text: tw()"></span></td>
+										</tr>
+										<!-- /ko -->
+										<tr>
+											<td>
+												<strong>Bonus</strong>
+												<ul>
+													<li data-bind="visible: $root.salary.salaryType()=='juniorentrainer'">Nur ein Trainer</li>
+													<li>Höheres Diplom als gefordert</li>
+													<li data-bind="visible: $root.salary.salaryType()=='spezialtrainer'">Spezialtrainer Diplom</li>
+												</ul>
+											</td>
+											<td class="text-right">
+												<!-- todo update -->
+												<span data-bind="text: sumBonus()"></span>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<strong>Abzüge</strong>
+												<ul>
+													<li>Traininslager</li>
+													<li>Trainingskleider</li>
+												</ul>
+											</td>
+											<td class="text-right"><span data-bind="text: sumAbzug()"></span></td>
+										</tr>
+
+										<!-- todo update -->
+										<!-- ko if: cheftrainer() -->
+										<tr>
+											<td>
+												<strong>Fehlendes Diplom</strong>
+											</td>
+											<td class="text-right">(<span data-bind="text: abzugDiplom()"></span>)</td>
+										</tr>
+										<!-- /ko -->
+
+										<tr>
+											<td><strong>Total</strong></td>
+											<td class="text-right"><strong data-bind="text: sum()"></strong></td>
+										</tr>
+
+										<!-- Spesen / Lohn nicht ausrechnen sondern nur Info und nicht in Tabelle!! -->
+										<tr>
+											<td>
+												Spesen<br />
+												<small>Pauschalspesen von 2'000 CHF pro Kalenderjahr</small>
+											</td>
+											<td class="text-right">INFO</td>
+										</tr>
+										<tr>
+											<td>
+												Lohn<br />
+												<small>Sozialabgaben:<br/>ab 2'300 CHF pro Kalenderjahr</small>
+											</td>
+											<td class="text-right">INFO</td>
+										</tr>
+
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script
+  src="https://code.jquery.com/jquery-3.4.1.min.js"
+  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+  crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/lodash@4.17.10/lodash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+
+<!-- Then Material JavaScript on top of Bootstrap JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/daemonite-material@4.1.1/js/material.min.js"></script>
+</body>
+</html>
