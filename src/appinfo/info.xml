@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<info xmlns:xsi= "http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="https://apps.nextcloud.com/schema/apps/info.xsd">
+    <id>nextforms</id>
+    <name>Nextforms</name>
+    <summary>Formbuilder</summary>
+    <description><![CDATA[Formbuilder like Google Forms or MS Forms]]></description>
+    <version>0.0.1</version>
+    <licence>agpl</licence>
+    <author mail="thomas@dasco.li" homepage="https://github.com/tdascoli/nextforms">Thomas D&#39;Ascoli</author>
+    <namespace>Nextforms</namespace>
+    <category>office</category>
+    <category>organization</category>
+    <category>tools</category>
+    <bugs>https://github.com/tdascoli/nextforms/issues</bugs>
+    <dependencies>
+        <nextcloud min-version="15" max-version="15"/>
+    </dependencies>
+    <navigations>
+        <navigation>
+            <name>Nextforms</name>
+            <route>nextforms.page.index</route>
+        </navigation>
+    </navigations>
+</info>
