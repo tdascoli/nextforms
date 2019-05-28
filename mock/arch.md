@@ -7,13 +7,13 @@
 [mapper::data to answers   ]  ->  [mapper::data to forms   ]
               |                                 |
               V                                 |
-[answers                   ]                    |
+[answers::internal         ]                    |
               A                                 |
               |                                 |
-[questions                 ]                    |
+[questions::internal       ]                    |
               A                                 |
               |                                 |
 [forms::json               ]  <-----------------+
               |
               V
-[forms::presentation       ]
+[forms::presentation       ]  (nextcloud -> users/groups/public)
