@@ -1,0 +1,15 @@
+{
+    "name": "Nextforms",
+    "description": "Formbuilder",
+    "type": "project",
+    "license": "AGPL",
+    "authors": [
+        {
+            "name": "Thomas D&#39;Ascoli"
+        }
+    ],
+    "require": {},
+    "require-dev": {
+        "phpunit/phpunit": "^5.4"
+    }
+}
